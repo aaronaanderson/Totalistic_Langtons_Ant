@@ -2,7 +2,8 @@
 
 class VectorInfluenceField{
   
-  VectorInfluenceField(int resolution){
+  VectorInfluenceField(int _resolution){
+    resolution = _resolution;
     vectorField = new PVector[width/resolution][height/resolution];
   }
   
@@ -11,7 +12,8 @@ class VectorInfluenceField{
     for(int y = 0; y < height/resolution; y++){
       PVector position = new PVector(x,y);
       PVector center = new PVector(width*0.5/resolution, height*0.5/resolution);
-      vectorField[x][y] = center.sub(position);
+      vectorField[x][y] = position.sub(center);
+      vectorField[x][y].y = abs(vectorField[x][y].y) * -1;
       vectorField[x][y].normalize();
     }
   }
@@ -45,5 +47,5 @@ void drawVector(PVector v, float x, float y, float scayl) {//take from Nature Of
   
   
   PVector vectorField[][];//currently will be limmited to 180 degrees
-  
+  int resolution;
 };
