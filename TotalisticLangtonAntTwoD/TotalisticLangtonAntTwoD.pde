@@ -1,54 +1,26 @@
 
+/*
+Currently, as is true in Langton's Ant, the influence of a cell is
+limmited to -90 and 90 degrees. However, I can see some problems 
+coming out of this. In the original, the influence is turn left (-90 degrees)
+OR turn right (+90 degrees). In this version, the influence may be anywhere 
+between -90 or 90 degrees (including floats). The influence angle is stored 
+as a vector. -90 degrees as a vector = (-1,0) and 90 = (1,0). An explenation
+requires pictures for a clearer explenation. I have these in drawings but bug
+me if I don't upload them to the repo.
+*/
 
-PVector vectorField[][];
 int resolution = 25;
-  
+VectorInfluenceField influenceField;  
 void setup(){
   size(600,600);
   
-  vectorField = new PVector[width][height];
+  influenceField = new VectorInfluenceField(resolution);
+  influenceField.reset();
   
-  reset();
 }
 
 void draw(){
-  drawVectors();
+  influenceField.drawVectors();
   
 }
-
-void reset(){
-  for(int x = 0; x < width/resolution; x++){
-    for(int y = 0; y < height/resolution; y++){
-      PVector position = new PVector(x,y);
-      PVector center = new PVector(width*0.5/resolution, height*0.5/resolution);
-      vectorField[x][y] = center.sub(position);
-      vectorField[x][y].normalize();
-    }
-  }
-}
-
-void drawVectors(){
-  for(int x = 0; x < width/resolution; x++){
-    for(int y = 0; y < height/resolution; y++){
-      drawVector(vectorField[x][y], x*resolution, y*resolution, resolution-2);
-    }
-  }
-}
-
-void drawVector(PVector v, float x, float y, float scayl) {//take from Nature Of Code
-    pushMatrix();
-    float arrowsize = 4;
-    // Translate to position to render vector
-    translate(x,y);
-    stroke(0,100);
-    strokeWeight(0.5);
-    // Call vector heading function to get direction (note that pointing to the right is a heading of 0) and rotate
-    rotate(v.heading2D());
-    // Calculate length of vector & scale it to be bigger or smaller if necessary
-    float len = v.mag()*scayl;
-    // Draw three lines to make an arrow (draw pointing up since we've rotate to the proper direction)
-    line(0,0,len,0);
-    line(len,0,len-arrowsize,+arrowsize/2);
-    line(len,0,len-arrowsize,-arrowsize/2);
-    popMatrix();
-  }
